@@ -10,7 +10,7 @@ setupscript= ./setup.sh
 configscript= ./config.sh
 
 [Grip]
-packages	= locales adduser sudo python less git-core gnupg flex bison gperf libsdl1.2-dev libesd0-dev squashfs-tools build-essential zip curl rsync libncurses5-dev zlib1g-dev sun-java6-jdk pngcrush schedtool
+packages	= locales adduser sudo python less git-core gnupg flex bison gperf libsdl1.2-dev libesd0-dev squashfs-tools build-essential zip unzip curl rsync libncurses5-dev zlib1g-dev sun-java6-jdk pngcrush schedtool
 keyring		= emdebian-archive-keyring
 source		= http://www.emdebian.org/grip
 suite		= squeeze main dev java

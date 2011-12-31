@@ -1,3 +1,3 @@
 mkdir andbotfs
 multistrap -f multi.strap
-chroot rootfs /config.sh
+chroot andbotfs /config.sh
