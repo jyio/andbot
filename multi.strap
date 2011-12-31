@@ -1,0 +1,26 @@
+[General]
+arch		= i386
+directory	= ./rootfs/
+cleanup		= true
+noauth		= true
+unpack		= true
+debootstrap	= Grip Debian
+aptsources	= Debian Updates
+setupscript= ./setup.sh
+configscript= ./config.sh
+
+[Grip]
+packages	= locales adduser sudo python git-core gnupg flex bison gperf libsdl1.2-dev libesd0-dev squashfs-tools build-essential zip curl rsync libncurses5-dev zlib1g-dev sun-java6-jdk pngcrush schedtool
+keyring		= emdebian-archive-keyring
+source		= http://www.emdebian.org/grip
+suite		= squeeze main dev java
+
+[Debian]
+keyring		= debian-archive-keyring
+source		= http://ftp.debian.org/debian
+suite		= squeeze main contrib non-free
+
+[Updates]
+keyring		= debian-archive-keyring
+source		= http://ftp.debian.org/debian
+suite		= squeeze-proposed-updates main contrib
