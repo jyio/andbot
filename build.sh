@@ -1,1 +1,1 @@
-makeself --notemp rootfs andbot.run 'AndBot Bacon Icecream Sandwich Maker <http://inportb.com/>' ./run.sh
+makeself --notemp rootfs andbot.run 'AndBot Bacon Icecream Sandwich Maker <http://inportb.com/>' ./andbot

@@ -48,3 +48,14 @@ Finally, to start the build, run
 	andbot mka bacon
 
 This might take a few hours depending on your hardware specs, so go rest or be productive. When it's done, you should find an update package in ~/android/system -- enjoy!
+
+## Updating
+
+Keeping your source and binaries up-to-date is as easy as
+
+	andbot sync
+	andbot mka bacon
+
+## Compatibility
+
+This should be totally compatible with the "standard" method of building CyanogenMod, except everything is contained within a directory. You don't even have to use the `andbot` commands, or you could use them only for some tasks.
