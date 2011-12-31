@@ -25,3 +25,4 @@ echo "nameserver 8.8.4.4" >> ${ROOTFS}/etc/resolv.conf
 echo "en_US.UTF-8 UTF-8" >> ${ROOTFS}/etc/locale.gen
 
 cp andbot ${ROOTFS}/
+chmod +x ${ROOTFS}/andbot

@@ -11,6 +11,7 @@ echo 'andbot ALL=(ALL:ALL) NOPASSWD: ALL' >> /etc/sudoers
 
 cat >> /home/andbot/.bashrc << 'HEREDOC'
 . /etc/bash_completion.d/*
+export PATH=~/android/system/out/host/linux-x86/bin:$PATH:/usr/local/sbin:/usr/sbin:/sbin
 PS1='`if [ \$? = 0 ]; then echo \[\e[32m\]; else echo \[\e[31m\]; fi`${debian_chroot:+$debian_chroot:}\[\e[0m\]\u@\h:\w\$ '
 HEREDOC
 
