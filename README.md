@@ -23,7 +23,7 @@ Alternatively, you could make the chroot yourself using `sudo ./mkrootfs.sh`.
 
 To enter the environment again, simply do
 
-	./rootfs/andbot
+	./andbotfs/andbot
 
 Now, you are ready to start. For your convenience, the `andbot` commands provide shortcuts to things that you would be doing often. To set up, run
 
