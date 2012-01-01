@@ -8,7 +8,7 @@ fi
 
 case $CMD in
 	'')
-		ROOTFS=${SELF%/*}
+		ROOTFS=`cd "${SELF%/*}"; pwd`
 
 		if [ "$ROOTFS" = "" ] || [ "$ROOTFS" = "/home/andbot/bin" ]; then
 			echo "usage: $SELF <command> [<argument>, ...]"
@@ -32,19 +32,29 @@ case $CMD in
 			exit
 		fi
 
-		mount -o bind /proc $ROOTFS/proc
-		mount -o bind /sys $ROOTFS/sys
-		mount -o bind /dev $ROOTFS/dev
-		mount -o bind /dev/pts $ROOTFS/dev/pts
+		mount | grep -Fq "$ROOTFS/proc"
+		MOUNTED=$?
+		if [ $MOUNTED -ne 0 ]; then
+			echo Mounting /proc, /sys, /dev, and /dev/pts
+			mount -o bind /proc "$ROOTFS/proc"
+			mount -o bind /sys "$ROOTFS/sys"
+			mount -o bind /dev "$ROOTFS/dev"
+			mount -o bind /dev/pts "$ROOTFS/dev/pts"
+		fi
 
-		chown -R 0:0 $ROOTFS/usr/bin/sudo $ROOTFS/etc/sudoers $ROOTFS/etc/sudoers.d
-		chmod 4755 $ROOTFS/usr/bin/sudo
+		chown -R 0:0 "$ROOTFS/usr/bin/sudo" "$ROOTFS/etc/sudoers" "$ROOTFS/etc/sudoers.d"
+		chmod 4755 "$ROOTFS/usr/bin/sudo"
 		HOME=$ROOTFS/home/andbot PATH=$ROOTFS/home/andbot/android/system/out/host/linux-x86/bin:$ROOTFS/home/andbot/bin adb root
 		echo Welcome to AndBot
+		chroot "$ROOTFS" su andbot -c 'cd ~/android/system; USE_CCACHE=1 bash -l'
 
-		chroot $ROOTFS su andbot -c 'cd ~/android/system; USE_CCACHE=1 bash -l'
-
-		umount -l $ROOTFS/dev/pts $ROOTFS/dev $ROOTFS/sys $ROOTFS/proc
+		if [ $MOUNTED -ne 0 ]; then
+			echo Unmounting /proc, /sys, /dev, and /dev/pts
+			while umount -l "$ROOTFS/dev/pts" 2> /dev/null; do true; done
+			while umount -l "$ROOTFS/dev" 2> /dev/null; do true; done
+			while umount -l "$ROOTFS/sys" 2> /dev/null; do true; done
+			while umount -l "$ROOTFS/proc" 2> /dev/null; do true; done
+		fi
 		;;
 	'init')
 		set -e -x
