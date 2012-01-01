@@ -3,6 +3,7 @@
 ## Overview
 
 This is a chroot environment for building CyanogenMod 9 from source for the Barnes & Noble NOOK Color. There are a couple of features that enhance the user experience
+
   1. the command prompt is prefixed with `AndBot:`, making it easy to distinguish between the usual interface and the development environment
   2. the prefix changes color depending on the success of the previous command: green symbolizes success and red symbolizes failure
   3. there is an `andbot` command within easy reach, providing shortcuts to several common activities
