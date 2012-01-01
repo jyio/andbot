@@ -52,7 +52,7 @@ Finally, to start the build, run
 
 	andbot mka bacon
 
-This might take a few hours depending on your hardware specs, so go rest or be productive. When it's done, you should find an update package in `~/android/system` -- enjoy!
+This might take a few hours depending on your hardware specs, so go rest or be productive. If you see errors regarding signapk.jar, you might not have sufficient memory; run `andbot release-512` and retry. When it's done, you should find an update package in `~/android/system` -- enjoy!
 
 ## Updating
 
@@ -61,7 +61,7 @@ Keeping your source and binaries up-to-date is as easy as
 	andbot sync
 	andbot mka bacon
 
-Remember to check [FatTire's tutorial][fattire] periodically to see if anything's changed. If you want, you could add these changes to `/andbot` yourself, or you could ask someone to do it for you.
+Remember to check [FatTire's tutorial][fattire] periodically to see if anything's changed. If you want, you could add these changes to `/andbot` yourself, or you could ask someone to do it for you. You might also find an updated /andbot within this very repository.
 
 ## Compatibility
 
