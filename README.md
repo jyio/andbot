@@ -10,7 +10,7 @@ This is a chroot environment for building CyanogenMod 9 from source for the Barn
 
 ## First Run
 
-To use a prebuilt chroot, [download it][andbot.run] and run
+To use a prebuilt chroot, [download it][prebuilt] and run
 
 	chmod +x andbot.run
 	./andbot.run
@@ -65,4 +65,4 @@ Keeping your source and binaries up-to-date is as easy as
 
 This should be totally compatible with the "standard" method of building CyanogenMod, except everything is contained within a directory. You don't even have to use the `andbot` commands, or you could use them only for some tasks.
 
-[andbot.run]: http://dev-host.org/users/inportb/683/andbot andbot.run
+[prebuilt]: http://dev-host.org/users/inportb/683/andbot "andbot.run"
