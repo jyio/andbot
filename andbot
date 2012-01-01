@@ -1,7 +1,5 @@
 #!/bin/sh
 
-set -e
-
 SELF=$0
 CMD=$1
 if [ $# -gt 0 ]; then
@@ -49,12 +47,12 @@ case $CMD in
 		umount -l $ROOTFS/dev/pts $ROOTFS/dev $ROOTFS/sys $ROOTFS/proc
 		;;
 	'init')
-		set -x
+		set -e -x
 		cd ~/android/system
 		repo init -u git://github.com/CyanogenMod/android.git -b ics $@
 		;;
 	'sync')
-		set -x
+		set -e -x
 		cd ~/android/system
 		repo sync $@
 		cd ~/android/system/system/vold
@@ -65,14 +63,14 @@ case $CMD in
 		fi
 		;;
 	'vendor')
-		set -x
+		set -e -x
 		cd ~/android/system/device/bn/encore
 		./extract-files.sh
 		cd ~/android/system/vendor/cm
 		./get-prebuilts
 		;;
 	'alternative-vendor-i-have-a-nook-color')
-		set -x
+		set -e -x
 		curl http://dl.dropbox.com/u/1213413/cm9/encore.tgz > ~/android/encore.tgz
 		mkdir -p ~/android/system/vendor/bn/encore/proprietary
 		tar pzxvf ~/android/encore.tgz -C ~/android/system/vendor/bn/encore/
@@ -83,47 +81,47 @@ case $CMD in
 		./get-prebuilts
 		;;
 	'brunch')
-		set -x
+		set -e -x
 		cd ~/android/system
 		USE_CCACHE=1 bash -c ". build/envsetup.sh; lunch cm_encore-userdebug; brunch $@"
 		rm -f update-cm-9.0.0-RC0-NookColor-KANG-signed.zip
 		ln out/target/product/encore/update-cm-9.0.0-RC0-NookColor-KANG-signed.zip ./
 		;;
 	'mka')
-		set -x
+		set -e -x
 		cd ~/android/system
 		USE_CCACHE=1 bash -c ". build/envsetup.sh; lunch cm_encore-userdebug; mka $@"
 		rm -f update-cm-9.0.0-RC0-NookColor-KANG-signed.zip
 		ln out/target/product/encore/update-cm-9.0.0-RC0-NookColor-KANG-signed.zip ./
 		;;
 	'make')
-		set -x
+		set -e -x
 		cd ~/android/system
 		USE_CCACHE=1 bash -c ". build/envsetup.sh; lunch cm_encore-userdebug; make $@"
 		rm -f update-cm-9.0.0-RC0-NookColor-KANG-signed.zip
 		ln out/target/product/encore/update-cm-9.0.0-RC0-NookColor-KANG-signed.zip ./
 		;;
 	'manifest')
-		set -x
+		set -e -x
 		curl http://pastebin.com/raw.php?i=FrFJmVtJ > ~/android/system/.repo/local_manifest.xml
 		;;
 	'github-https')
-		set -x
+		set -e -x
 		sed 's/git\:\/\/github.com/https\:\/\/github.com/' ~/android/system/.repo/manifest.xml > .manifest.xml
 		mv .manifest.xml ~/android/system/.repo/manifest.xml
 		;;
 	'github-git')
-		set -x
+		set -e -x
 		sed 's/https\:\/\/github.com/git\:\/\/github.com/' ~/android/system/.repo/manifest.xml > .manifest.xml
 		mv .manifest.xml ~/android/system/.repo/manifest.xml
 		;;
 	'release-512')
-		set -x
+		set -e -x
 		sed 's/-Xmx2048m/-Xmx512m/' ~/android/system/build/tools/releasetools/common.py > .common.py
 		mv .common.py ~/android/system/build/tools/releasetools/common.py
 		;;
 	'release-2048')
-		set -x
+		set -e -x
 		sed 's/-Xmx512m/-Xmx2048m/' ~/android/system/build/tools/releasetools/common.py > .common.py
 		mv .common.py ~/android/system/build/tools/releasetools/common.py
 		;;
