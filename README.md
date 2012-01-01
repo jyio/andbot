@@ -52,7 +52,7 @@ Finally, to start the build, run
 
 	andbot mka bacon
 
-This might take a few hours depending on your hardware specs, so go rest or be productive. If you see errors regarding signapk.jar, you might not have sufficient memory; run `andbot release-512` and retry. When it's done, you should find an update package in `~/android/system` -- enjoy!
+This might take a few hours depending on your hardware specs, so go rest or be productive. If you see errors regarding `signapk.jar`, you might not have sufficient memory; run `andbot release-512` and retry. When it's done, you should find an update package in `~/android/system` -- enjoy!
 
 ## Updating
 
