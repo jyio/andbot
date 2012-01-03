@@ -20,7 +20,7 @@ If you have `sudo` installed, you should be asked for your password at the end, 
 
 To exit, type `exit` or `logout`, or press `^D`.
 
-Alternatively, you could make the chroot yourself using `sudo ./mkrootfs.sh`.
+Alternatively, you could make the chroot yourself using `scons debian package=andbot; scons debian package=andbot-git-repo; sudo scons andbotfs`.
 
 To enter the environment again, simply do
 

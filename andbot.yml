@@ -1,0 +1,12 @@
+Version: 0.0.1-0
+Architecture: all
+Maintainer: Jiang Yio <inportb@gmail.com>
+Depends: git-repo, flex, bison, gperf, libsdl1.2-dev, libesd0-dev, squashfs-tools, build-essential, zip, unzip, curl, libncurses5-dev, zlib1g-dev, sun-java6-jdk, pngcrush, schedtool
+Section: custom
+Priority: optional
+Homepage: https://github.com/jyio/andbot
+Description: AndBot provides various shortcuts for building CyanogenMod from source.
+Debian:
+  Include:
+    usr/bin/andbot: '#andbot'
+    etc/bash_completion.d/andbot: '#bash_completion_andbot'

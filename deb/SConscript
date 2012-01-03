@@ -1,0 +1,61 @@
+import os, shutil, sys, hashlib, yaml
+Import('env') # exported by parent SConstruct
+
+# core info
+control = yaml.load(open(os.path.join(env.GetLaunchDir(),ARGUMENTS['package']+'.yml')))
+DEB_PACKAGE = control['Package'] = ARGUMENTS['package']
+controldata = control['Debian']
+del control['Debian']
+
+# packaged files
+DEBFILES = controldata['Include'].items()
+
+# package name
+debpkg = '#deb/%s_%s_%s.deb'%(DEB_PACKAGE,control['Version'],control['Architecture'])
+
+# and we want it to be built when we build 'debian'
+env.Alias('debian',debpkg)
+
+DEB_CONTROL = os.path.join(DEB_PACKAGE,'DEBIAN/control')
+DEB_CONFFILES = os.path.join(DEB_PACKAGE,'DEBIAN/conffiles')
+DEB_MD5SUMS = os.path.join(DEB_PACKAGE,'DEBIAN/md5sums')
+
+# copy files into place
+for f in DEBFILES:
+	dest = os.path.join(DEB_PACKAGE,f[0])	# put everything in a directory named after the package
+	env.Depends(debpkg,dest)			# the package depends on this file
+	env.Command(dest,f[1],Copy('$TARGET','$SOURCE'))	# copy
+	env.Depends(DEB_CONTROL,dest)	# control file depends on this file, for installed size
+
+# control file
+def make_control(target=None,source=None,env=None):
+	control['Installed-Size'] = sum((os.stat(str(env.File(i[1])))[6] for i in DEBFILES),0)
+	f = open(str(target[0]),'w')
+	f.write(u'\n'.join(k+': '+str(v) for k,v in control.iteritems()).encode('utf-8')+u'\n')
+	f.close()
+env.Depends(debpkg,DEB_CONTROL)
+env.Command(DEB_CONTROL,None,make_control)
+
+# conffiles file
+def make_conffiles(target=None,source=None,env=None):
+	try:
+		cf = u'\n'.join(controldata['Config'])
+	except (KeyError,TypeError):
+		cf = u''
+	f = open(str(target[0]),'w')
+	f.write(cf)
+	f.close()
+env.Depends(debpkg,DEB_CONFFILES)
+env.Command(DEB_CONFFILES,None,make_conffiles)
+
+# md5sums file
+def make_md5sums(target=None,source=None,env=None):
+	sums = '\n'.join(hashlib.md5(open(os.path.join('deb',DEB_PACKAGE,f[0]),'r').read()).hexdigest()+' '+f[0] for f in DEBFILES)
+	f = open(str(target[0]),'w')
+	f.write(sums)
+	f.close()
+env.Depends(debpkg,DEB_MD5SUMS)
+env.Command(DEB_MD5SUMS,None,make_md5sums)
+
+# generate package
+env.Command(debpkg,DEB_CONTROL,'fakeroot dpkg-deb -b %s %s'%('deb/%s'%DEB_PACKAGE,'$TARGET'))

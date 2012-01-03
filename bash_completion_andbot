@@ -1,0 +1,7 @@
+_andbot_show() {
+	local cur
+	COMPREPLY=()
+	cur=${COMP_WORDS[COMP_CWORD]}
+	COMPREPLY=($(compgen -W 'init sync vendor brunch mka make manifest github-https github-git release-512 release-2048 bacon' -- $cur))
+}
+complete -F _andbot_show andbot

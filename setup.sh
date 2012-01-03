@@ -16,7 +16,6 @@ fi
 if [ "/" = "ROOTFS" ] ; then echo "Refusing to change your build system's files" ; fi
 
 # set hostname
-echo AndBot > $ROOTFS/etc/debian_chroot
 echo andbot > $ROOTFS/etc/hostname
 echo "127.0.0.1 localhost.localdomain localhost" > ${ROOTFS}/etc/hosts
 echo "127.0.1.1 andbot andbot" >> ${ROOTFS}/etc/hosts
@@ -24,5 +23,4 @@ echo "nameserver 8.8.8.8" > ${ROOTFS}/etc/resolv.conf
 echo "nameserver 8.8.4.4" >> ${ROOTFS}/etc/resolv.conf
 echo "en_US.UTF-8 UTF-8" >> ${ROOTFS}/etc/locale.gen
 
-cp andbot ${ROOTFS}/
-chmod +x ${ROOTFS}/andbot
+cp deb/*.deb ${ROOTFS}/root/
