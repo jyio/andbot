@@ -65,8 +65,6 @@ case $CMD in
 		set -e -x
 		cd ~/android/system
 		repo sync $@
-		cd ~/android/system/system/vold
-		git fetch http://review.cyanogenmod.com/p/CyanogenMod/android_system_vold refs/changes/77/11277/1 && git cherry-pick FETCH_HEAD
 		cd ~/android/system/external/mesa3d/src/glsl
 		if ! grep -q '<stddef.h>' linker.cpp; then
 			sed -i '1i #include <stddef.h>' linker.cpp
