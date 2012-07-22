@@ -1,26 +1,17 @@
 [General]
-arch		= i386
+arch		= amd64
 directory	= ./andbotfs/
 cleanup		= true
 noauth		= true
 unpack		= true
-debootstrap	= Grip Debian
-aptsources	= Debian Updates
-setupscript= ./setup.sh
-configscript= ./config.sh
-
-[Grip]
-packages	= locales adduser sudo python less git-core gnupg flex bison gperf libsdl1.2-dev libesd0-dev squashfs-tools build-essential zip unzip curl libncurses5-dev zlib1g-dev sun-java6-jdk pngcrush schedtool
-keyring		= emdebian-archive-keyring
-source		= http://www.emdebian.org/grip
-suite		= squeeze main dev java
+ignorenativearch	= true
+debootstrap	= Debian
+aptsources	= Debian
+setupscript	= ./setup.sh
+configscript	= ./config.sh
 
 [Debian]
 keyring		= debian-archive-keyring
+packages	= locales adduser sudo apt git-core gnupg flex bison gperf build-essential zip unzip curl openjdk-6-jdk libxml2-utils xsltproc schedtool file pngcrush ia32-libs nano python
 source		= http://ftp.debian.org/debian
-suite		= squeeze main contrib non-free
-
-[Updates]
-keyring		= debian-archive-keyring
-source		= http://ftp.debian.org/debian
-suite		= squeeze-proposed-updates main contrib
+suite		= wheezy

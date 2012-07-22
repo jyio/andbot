@@ -1,7 +1,7 @@
 Version: 0.0.1-0
 Architecture: all
 Maintainer: Jiang Yio <inportb@gmail.com>
-Depends: python, less, git-core, gnupg
+Depends: python, git-core, gnupg
 Provides: git-repo
 Section: vcs
 Priority: optional

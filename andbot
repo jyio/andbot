@@ -15,10 +15,11 @@ case $CMD in
 			echo "commands:"
 			echo "	init:		repo init"
 			echo "	sync:		repo sync"
-			echo "	vendor:		prepare vendor files"
+			echo "	prebuilt:	prepare prebuilt/vendor files"
 			echo "	brunch:		build"
 			echo "	mka:		build (i.e.: andbot mka bacon)"
 			echo "	make:		build (i.e.: andbot make -j[#cpus] bacon)"
+			echo "	clobber:	remove build directory"
 			echo "	manifest:	fetch local_manifest.xml"
 			echo "	github-https:	workaround for github-related errors"
 			echo "	github-git:	undo aforementioned workaround"
@@ -28,8 +29,7 @@ case $CMD in
 		fi
 
 		if [ $(id -u) -ne 0 ]; then
-			sudo $SELF
-			exit
+			exec sudo $SELF
 		fi
 
 		mount | grep -Fq "$ROOTFS/proc"
@@ -42,11 +42,15 @@ case $CMD in
 			mount -o bind /dev/pts "$ROOTFS/dev/pts"
 		fi
 
-		chown -R 0:0 "$ROOTFS/usr/bin/sudo" "$ROOTFS/etc/sudoers" "$ROOTFS/etc/sudoers.d"
+		chown -R 0:0 "$ROOTFS/usr/bin/sudo" "$ROOTFS/usr/lib/sudo" "$ROOTFS/etc/sudoers" "$ROOTFS/etc/sudoers.d"
 		chmod 4755 "$ROOTFS/usr/bin/sudo"
-		HOME=$ROOTFS/home/andbot PATH=$ROOTFS/home/andbot/android/system/out/host/linux-x86/bin:$ROOTFS/home/andbot/bin adb root
-		echo Welcome to AndBot
-		chroot "$ROOTFS" su andbot -c 'cd ~/android/system; USE_CCACHE=1 bash -l'
+		echo
+		echo "====8<==========="
+		echo "Welcome to AndBot"
+		echo " * bacon maker * "
+		echo "===========>8===="
+		echo
+		chroot "$ROOTFS" su andbot -c 'cd ~/android/system; ~/bin/adb devices; USE_CCACHE=1 bash -l'
 
 		if [ $MOUNTED -ne 0 ]; then
 			echo Unmounting /proc, /sys, /dev, and /dev/pts
@@ -59,59 +63,50 @@ case $CMD in
 	'init')
 		set -e -x
 		cd ~/android/system
-		repo init -u git://github.com/CyanogenMod/android.git -b ics $@
+		exec repo init -u git://github.com/CyanogenMod/android.git -b jellybean $@
 		;;
 	'sync')
 		set -e -x
 		cd ~/android/system
-		repo sync $@
-		cd ~/android/system/external/mesa3d/src/glsl
-		if ! grep -q '<stddef.h>' linker.cpp; then
-			sed -i '1i #include <stddef.h>' linker.cpp
+		exec repo sync $@
+		;;
+	'prebuilt')
+		if [ "$1" != "" ]; then
+			ZIP=`readlink -f "$1"`
+			set -e -x
+			cd ~/android/system/device/bn/encore
+			./unzip-files.sh "$ZIP"
+		else
+			set -e -x
+			cd ~/android/system/device/bn/encore
+			./extract-files.sh
 		fi
-		;;
-	'vendor')
-		set -e -x
-		cd ~/android/system/device/bn/encore
-		./extract-files.sh
 		cd ~/android/system/vendor/cm
-		./get-prebuilts
-		;;
-	'alternative-vendor-i-have-a-nook-color')
-		set -e -x
-		curl http://dl.dropbox.com/u/1213413/cm9/encore.tgz > ~/android/encore.tgz
-		mkdir -p ~/android/system/vendor/bn/encore/proprietary
-		tar pzxvf ~/android/encore.tgz -C ~/android/system/vendor/bn/encore/
-		rm ~/android/encore.tgz
-		cd ~/android/system/device/bn/encore
-		./setup-makefiles.sh
-		cd ~/android/system/vendor/cm
-		./get-prebuilts
+		exec ./get-prebuilts
 		;;
 	'brunch')
 		set -e -x
 		cd ~/android/system
-		USE_CCACHE=1 bash -c ". build/envsetup.sh; lunch cm_encore-userdebug; brunch $@"
-		rm -f update-cm-9.0.0-RC0-NookColor-KANG-signed.zip
-		ln out/target/product/encore/update-cm-9.0.0-RC0-NookColor-KANG-signed.zip ./
+		USE_CCACHE=1 exec bash -c ". build/envsetup.sh; lunch cm_encore-userdebug; brunch $@"
 		;;
 	'mka')
 		set -e -x
 		cd ~/android/system
-		USE_CCACHE=1 bash -c ". build/envsetup.sh; lunch cm_encore-userdebug; mka $@"
-		rm -f update-cm-9.0.0-RC0-NookColor-KANG-signed.zip
-		ln out/target/product/encore/update-cm-9.0.0-RC0-NookColor-KANG-signed.zip ./
+		USE_CCACHE=1 exec bash -c ". build/envsetup.sh; lunch cm_encore-userdebug; mka $@"
 		;;
 	'make')
 		set -e -x
 		cd ~/android/system
-		USE_CCACHE=1 bash -c ". build/envsetup.sh; lunch cm_encore-userdebug; make $@"
-		rm -f update-cm-9.0.0-RC0-NookColor-KANG-signed.zip
-		ln out/target/product/encore/update-cm-9.0.0-RC0-NookColor-KANG-signed.zip ./
+		USE_CCACHE=1 exec bash -c ". build/envsetup.sh; lunch cm_encore-userdebug; make $@"
+		;;
+	'clobber')
+		set -e -x
+		cd ~/android/system
+		exec make clobber
 		;;
 	'manifest')
 		set -e -x
-		curl http://pastebin.com/raw.php?i=FrFJmVtJ > ~/android/system/.repo/local_manifest.xml
+		curl http://pastebin.com/raw.php?i=vZFKdc8m > ~/android/system/.repo/local_manifest.xml
 		;;
 	'github-https')
 		set -e -x

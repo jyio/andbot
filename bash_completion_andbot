@@ -2,6 +2,38 @@ _andbot_show() {
 	local cur
 	COMPREPLY=()
 	cur=${COMP_WORDS[COMP_CWORD]}
-	COMPREPLY=($(compgen -W 'init sync vendor brunch mka make manifest github-https github-git release-512 release-2048 bacon' -- $cur))
+	if [ "${COMP_CWORD}" == "1" ]; then
+		COMPREPLY=($(compgen -W 'init sync prebuilt brunch mka make clobber manifest github-https github-git release-512 release-2048' -- "${cur}"))
+		return 0
+	fi
+	case "${COMP_WORDS[1]}" in
+		sync)
+			if [ "${COMP_CWORD}" == "2" ]; then
+				COMPREPLY=($(compgen -W '-j' -- "${cur}"))
+			fi
+			;;
+		prebuilt)
+			if [ "${COMP_CWORD}" == "2" ]; then
+				COMPREPLY=($(compgen -o default -- "${cur}"))
+			fi
+			;;
+		brunch)
+			if [ "${COMP_CWORD}" == "2" ]; then
+				COMPREPLY=($(compgen -W 'encore' -- "${cur}"))
+			fi
+			;;
+		mka)
+			COMPREPLY=($(compgen -W 'bacon' -- "${cur}") $(compgen -o default -- "${cur}"))
+			;;
+		make)
+			if [[ "${cur}" == "-"* ]]; then
+				COMPREPLY=($(compgen -W '-j' -- "${cur}") $(compgen -o default -- "${cur}"))
+			else
+				COMPREPLY=($(compgen -W 'bacon' -- "${cur}") $(compgen -o default -- "${cur}"))
+			fi
+			;;
+		*)
+			COMPREPLY=($(compgen -o default -- "${cur}"))
+	esac
 }
 complete -F _andbot_show andbot
